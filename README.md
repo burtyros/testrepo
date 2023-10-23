@@ -5,8 +5,54 @@
 **BI.ZONE Triage поможет:**
 * собрать данные с хоста, такие как: информация о системе, сетевой активности, историю выполнения команд и важные логи. Для этого используются Profiles или Presets;
 * просканировать YARA файлы и активные процессы. Подробнее в разделе **Сканирование Yara**.
-Список аргументов
-## Profiles and Presets
+Собранные данные сохраняются плоские файлы формата JSON.
+
+## Использование BI.ZONE Triage
+Запуск утилиты возможен только с root привелегиями.
+
+### Аргументы командной строки
+```
+  -h, --help           Вывести help по использованию утилиты
+  --version            Вывести версию утилиты
+
+Параметры запуска:
+  -p=PROFILE..., --profiles
+                       Specify the list of desired profiles and/or presets separated by commas
+                       Specify 'list' to print the available values and exit
+                       To exclude a profile, use the '-' prefix (see examples)
+  -c=CONFIG, --config  Set the path to a custom configuration file to CONFIG
+  --customdir=DIR      Set the directory for the 'customfolderinfo' profile to DIR
+
+  сканирование yara:
+    --yararules=YARAFILE
+                       Set the path to the yara rules feed to YARAFILE
+    --yaradir=YARADIR  Set the directory to scan by yara to YARADIR
+    --yarapid=YARADPID Set the PID to scan by yara to YARAPID
+
+
+Выходные параметры:
+  директория для сохранения результатов работы:
+    -o=DIR, --outdir   Set the path to the output directory for saving the report to DIR
+                       (by default, it is the current working directory)
+
+  адрес для отправки логов по сети:
+    --host=ADDR        Set the host address (IP address or domain) for sending the report to ADDR
+    --port=PORT        Set the port for sending the report to PORT
+
+  архивирование:
+    -z, --zip          Pack the report in a Zip archive
+    --zipname=ZIPNAME  Set the Zip archive file name to ZIPNAME (ZIPNAME.zip if the extension is not specified???)
+    --zippwd=PWD       Set the Zip archive password to PWD
+
+
+Дополнительные опции:
+  -t=DIR, --tempdir    Set the path to the directory for temporary files to DIR
+  --utc                Use the UTC timezone. By default, the local timezone is used
+  --limit-time=SEC     Set the time limit (in seconds) to SEC
+  --limit-ram=RAMPCNT  Set the RAM limit (in percent) to RAMPCNT
+  --limit-cpu=CPUPCNT  Set the CPU limit (in percent) to CPUPCNT
+```
+### Profiles and Presets
 Для сбора данных в решении предусмотрено использование Profiles и Presets (ключ ```-p``` или ```--profiles```).
 Для вывода всех доступных Profiles и Presets используйте: ```-p list```
 
