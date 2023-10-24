@@ -101,19 +101,43 @@
 Примеры JSON файлов событий выложены в папке [result examples]().
 Описание модели данных событий разных типов представлено в [Wiki]().
 Возможно как локальное сохранение результатов работы, так и отправка их по сети в Log Management System.
+
 **Локальное сохранение**
 При сборе данных по Profiles или Prosets, собранные данные разбиваются по Profiles и представляются в виде отдельных файлов с сериями событий. Один JSON - одна строка файла.
 По умолчанию, полученные файлы сохраняются в текущую директорию, из которой запущена утилита. При необходимости, можно указать собственную директорию через аргумент ```-o``` или ```--output```. Пример:
 ```sudo ./bz_triage_nix -p investigation,containers -o /home/testuser```
+
 **Отправка результатов в Log Management System**
 Для отправки полученных данных в Log Management Sytem необходимо установить атрибуты  ```--host``` и ```--port```. Например:
 ```sudo ./bz_triage_nix -p investigation,containers --host 10.10.10.10 --port 5000```
-**Архивирование результатов**
 
+**Архивирование результатов**
+Тут еще нужно описать
 
 # Примеры использования
 ## Сбор данных с пресетом для криминалистического анализа, сканирование Yara указанной папки и отправка данных в ELK
-Пример конфигурации Logstash:
+Пример конфигурации Logstash с последующей передачей в elasticsearch:
+```
+input {  tcp {
+    id => "watch_to_logstash"
+    port => 5000
+    codec => json
+  }
+}filter {
+}
+output {
+ elasticsearch {
+    id => "logstash-esm-indexer"
+    hosts => ["https://10.10.10.11:9200"]
+    user => "${BZ_TRIAGE_USER}"
+    password => "${BZ_TRIAGE_PASS}"
+    ilm_enabled => false
+    manage_template => false
+    index => "bz-triage-esm"
+    ssl_certificate_verification => false
+        }
+}
+```
 Пример запуска BI.ZONE Triage:
 ```
 sudo ./bz_triage_nix -p investigation --yararules ./rules.yar --yaradir /tmp/* --host logstash.myhost.ru --port 5000 
